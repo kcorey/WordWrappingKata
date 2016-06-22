@@ -11,10 +11,26 @@
 @implementation Wrapper
 
 + (NSString *)wrap:(NSString *)inputString wrapLength:(NSInteger)wrapLength {
+
+    if (!inputString
+        || [inputString isEqualToString:@""]) {
+        
+        return inputString;
+    }
     
-    NSString *result = inputString;
+    NSInteger workingLength = wrapLength;
     
-    return result;
+    workingLength = fmax(1,workingLength);
+    workingLength = fmin(workingLength,[inputString length]);
+    
+    
+    
+    NSString *head = [inputString substringToIndex:workingLength];
+    NSString *tail = [self wrap:[inputString substringFromIndex:workingLength] wrapLength:wrapLength];
+    
+    tail = [tail length] > 0 ? [@"\n" stringByAppendingString:tail] : tail;
+    
+    return [NSString stringWithFormat:@"%@%@",head,tail];
 }
 
 @end
