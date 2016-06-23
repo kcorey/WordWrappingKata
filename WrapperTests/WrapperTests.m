@@ -58,7 +58,7 @@
 - (void)testCanWrapOnce {
     
     NSString *inputString = @"foo ber";
-    NSString *outString = @"foo b\ner";
+    NSString *outString = @"foo \nber";
     NSInteger wrapToLength = 5;
     
     NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
@@ -69,7 +69,7 @@
 - (void)testCanWrapTwice {
     
     NSString *inputString = @"foo ber";
-    NSString *outString = @"foo\n be\nr";
+    NSString *outString = @"foo\n \nber";
     NSInteger wrapToLength = 3;
     
     NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
@@ -77,5 +77,48 @@
     XCTAssertEqualObjects(outString, result);
 }
 
+- (void)testCanWrapHyphen {
+    
+    NSString *inputString = @"foo-ber";
+    NSString *outString = @"foo-\nber";
+    NSInteger wrapToLength = 5;
+    
+    NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
+    
+    XCTAssertEqualObjects(outString, result);
+}
+
+- (void)testCanWrapMultipleHyphens {
+    
+    NSString *inputString = @"foo-ber Petunia-waffle";
+    NSString *outString = @"foo-\nber \nPetun\nia-\nwaffl\ne";
+    NSInteger wrapToLength = 5;
+    
+    NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
+    
+    XCTAssertEqualObjects(outString, result);
+}
+
+- (void)testCanWrapMultipleBreakingCharacters {
+    
+    NSString *inputString = @"foo-ber - Petunia-waffle";
+    NSString *outString = @"foo-\nber -\n \nPetun\nia-\nwaffl\ne";
+    NSInteger wrapToLength = 5;
+    
+    NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
+    
+    XCTAssertEqualObjects(outString, result);
+}
+
+- (void)testlipsum {
+    
+    NSString *inputString = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec feugiat tristique consequat. Vivamus lobortis turpis lorem, ut mattis elit interdum vitae. Cras velit turpis, lacinia in pulvinar id, viverra in erat. Sed non turpis ullamcorper, efficitur erat eget, semper turpis.";
+    NSString *outString = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. \nDonec feugiat tristique consequat. Vivamus lobortis turpis \nlorem, ut mattis elit interdum vitae. Cras velit turpis, \nlacinia in pulvinar id, viverra in erat. Sed non turpis \nullamcorper, efficitur erat eget, semper turpis.";
+    NSInteger wrapToLength = 60;
+    
+    NSString *result = [Wrapper wrap:inputString wrapLength:wrapToLength];
+    
+    XCTAssertEqualObjects(outString, result);
+}
 
 @end
